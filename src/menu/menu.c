@@ -141,9 +141,9 @@ static void menu_init (boot_params_t *boot_params) {
  * @param menu Pointer to the menu structure.
  */
 static void menu_deinit (menu_t *menu) {
-    hdmi_send_game_id(menu->boot_params);
-
     ui_components_background_free();
+
+    hdmi_send_game_id(menu->boot_params);
 
     path_free(menu->load.disk_slots.primary.disk_path);
     path_free(menu->load.rom_path);
