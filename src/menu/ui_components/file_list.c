@@ -13,7 +13,7 @@
 /**
  * @brief Icon string for directory entries in the file list.
  */
-static const char *directory_icon = "[DIR] ";
+static const char *directory_icon = "";  // Removed DIR label
 // static const char *archive_icon = "[Zip] ";
 // static const char *rom_icon = "[Rom] ";
 // static const char *disk_icon = "[Disk] ";
