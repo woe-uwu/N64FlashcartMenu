@@ -187,12 +187,7 @@ static void draw(menu_t *menu, surface_t *display) {
         }
     }
 
-    ui_components_actions_bar_text_draw(
-        STL_DEFAULT,
-        ALIGN_CENTER, VALIGN_TOP,
-        "◀ Change Tab ▶\n"
-        "\n"
-    );    
+        // Removed tab change hint for cleaner look
 
     rdpq_detach_show();   
 }

@@ -631,20 +631,12 @@ static void draw (menu_t *menu, surface_t *d) {
         menu->browser.entries == 0 ? STL_GRAY : STL_DEFAULT
     );
 
-    if (menu->current_time >= 0) {
+        if (menu->current_time >= 0) {
         ui_components_actions_bar_text_draw(
             STL_DEFAULT,
             ALIGN_CENTER, VALIGN_TOP,
-            "C-▼▲ Fast Scroll | ◀ Tabs ▶ \n"
             "%s",
             ctime(&menu->current_time)
-        );
-    } else {
-        ui_components_actions_bar_text_draw(
-            STL_DEFAULT,
-            ALIGN_CENTER, VALIGN_TOP,
-            "C-▼▲ Fast Scroll | ◀ Tabs ▶ \n"
-            "\n"
         );
     }
 
