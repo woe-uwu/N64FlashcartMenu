@@ -26,3 +26,4 @@
 
 # Ignore macOS filesystem cruft
 .DS_Store
+*.deb
