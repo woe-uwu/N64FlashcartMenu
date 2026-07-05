@@ -274,92 +274,34 @@
 #define FILE_LIST_HIGHLIGHT_X           (VISIBLE_AREA_X0)
 
 /**
- * @def BACKGROUND_EMPTY_COLOR
- * @brief Color used when no background image is present (RGBA8888).
+ * Colors - Full Soft Pastel Theme
  */
-#define BACKGROUND_EMPTY_COLOR          RGBA32(0x00, 0x00, 0x00, 0xFF)
-/**
- * @def BACKGROUND_OVERLAY_COLOR
- * @brief Overlay color for the background (RGBA8888, semi-transparent).
- */
-#define BACKGROUND_OVERLAY_COLOR        RGBA32(0x00, 0x00, 0x00, 0xA0)
 
-/**
- * @def BORDER_COLOR
- * @brief Color of UI borders (RGBA8888).
- */
-#define BORDER_COLOR                    RGBA32(0xFF, 0xFF, 0xFF, 0xFF)
+// Backgrounds
+#define BACKGROUND_EMPTY_COLOR          RGBA32(0xF8, 0xF4, 0xFF, 0xFF)  // Light lavender
+#define BACKGROUND_OVERLAY_COLOR        RGBA32(0x20, 0x20, 0x35, 0xD0)  // Lighter dark overlay
 
-/**
- * @def PROGRESSBAR_BG_COLOR
- * @brief Background color of the progress bar (RGBA8888).
- */
-#define PROGRESSBAR_BG_COLOR            RGBA32(0x00, 0x00, 0x00, 0xFF)
-/**
- * @def PROGRESSBAR_DONE_COLOR
- * @brief Color of the completed portion of the progress bar (RGBA8888).
- */
-#define PROGRESSBAR_DONE_COLOR          RGBA32(0x3B, 0x7C, 0xF5, 0xFF)
+// Borders
+#define BORDER_COLOR                    RGBA32(0xC8, 0xB0, 0xE8, 0xFF)
 
-/**
- * @def SCROLLBAR_BG_COLOR
- * @brief Background color of the scrollbar (RGBA8888).
- */
-#define SCROLLBAR_BG_COLOR              RGBA32(0x3F, 0x3F, 0x3F, 0xFF)
-/**
- * @def SCROLLBAR_INACTIVE_COLOR
- * @brief Inactive color of the scrollbar (RGBA8888).
- */
-#define SCROLLBAR_INACTIVE_COLOR        RGBA32(0x5F, 0x5F, 0x5F, 0xFF)
-/**
- * @def SCROLLBAR_POSITION_COLOR
- * @brief Color of the scrollbar position indicator (RGBA8888).
- */
-#define SCROLLBAR_POSITION_COLOR        RGBA32(0x7F, 0x7F, 0x7F, 0xFF)
+// Progress / Scroll
+#define PROGRESSBAR_BG_COLOR            RGBA32(0xE8, 0xE0, 0xF0, 0xFF)
+#define PROGRESSBAR_DONE_COLOR          RGBA32(0xA0, 0xE0, 0xC8, 0xFF)
 
-/**
- * @def DIALOG_BG_COLOR
- * @brief Background color for dialog boxes (RGBA8888).
- */
-#define DIALOG_BG_COLOR                 RGBA32(0x00, 0x00, 0x00, 0xFF)
+#define SCROLLBAR_BG_COLOR              RGBA32(0xE0, 0xE0, 0xF0, 0xFF)
+#define SCROLLBAR_INACTIVE_COLOR        RGBA32(0xD0, 0xD0, 0xE8, 0xFF)
+#define SCROLLBAR_POSITION_COLOR        RGBA32(0xB0, 0xD0, 0xFF, 0xFF)
 
-/**
- * @def BOXART_LOADING_COLOR
- * @brief Color used while boxart is loading (RGBA8888).
- */
-#define BOXART_LOADING_COLOR            RGBA32(0x00, 0x00, 0x00, 0xFF)
+// Dialogs & Highlights
+#define DIALOG_BG_COLOR                 RGBA32(0xFF, 0xF8, 0xF8, 0xF0)
+#define FILE_LIST_HIGHLIGHT_COLOR       RGBA32(0xE8, 0xD8, 0xFF, 0x88)
+#define CONTEXT_MENU_HIGHLIGHT_COLOR    RGBA32(0xE0, 0xF0, 0xFF, 0x99)
+#define BOXART_LOADING_COLOR            RGBA32(0xF0, 0xE8, 0xFF, 0xFF)
 
-/**
- * @def FILE_LIST_HIGHLIGHT_COLOR
- * @brief Highlight color for file list entries (RGBA8888).
- */
-#define FILE_LIST_HIGHLIGHT_COLOR       RGBA32(0x7F, 0x7F, 0x7F, 0x44)   // Quite transparent grey
-
-/**
- * @def CONTEXT_MENU_HIGHLIGHT_COLOR
- * @brief Highlight color for context menu entries (RGBA8888).
- */
-#define CONTEXT_MENU_HIGHLIGHT_COLOR    RGBA32(0x7F, 0x7F, 0x7F, 0xFF)
-
-/**
- * @def TAB_INACTIVE_BORDER_COLOR
- * @brief Border color for inactive tabs (RGBA8888).
- */
-#define TAB_INACTIVE_BORDER_COLOR       RGBA32(0x5F, 0x5F, 0x5F, 0xFF)
-/**
- * @def TAB_ACTIVE_BORDER_COLOR
- * @brief Border color for active tabs (RGBA8888).
- */
-#define TAB_ACTIVE_BORDER_COLOR         RGBA32(0xFF, 0xFF, 0xFF, 0xFF)
-/**
- * @def TAB_INACTIVE_BACKGROUND_COLOR
- * @brief Background color for inactive tabs (RGBA8888).
- */
-#define TAB_INACTIVE_BACKGROUND_COLOR   RGBA32(0x3F, 0x3F, 0x3F, 0xFF)
-/**
- * @def TAB_ACTIVE_BACKGROUND_COLOR
- * @brief Background color for active tabs (RGBA8888).
- */
-#define TAB_ACTIVE_BACKGROUND_COLOR     RGBA32(0x6F, 0x6F, 0x6F, 0xFF)
+// Tabs
+#define TAB_INACTIVE_BORDER_COLOR       RGBA32(0xD8, 0xC8, 0xE8, 0xFF)
+#define TAB_ACTIVE_BORDER_COLOR         RGBA32(0xC0, 0xA8, 0xE0, 0xFF)
+#define TAB_INACTIVE_BACKGROUND_COLOR   RGBA32(0xF0, 0xE8, 0xF8, 0xFF)
+#define TAB_ACTIVE_BACKGROUND_COLOR     RGBA32(0xE0, 0xF0, 0xFF, 0xFF)
 
 #endif /* COMPONENTS_CONSTANTS_H__ */
