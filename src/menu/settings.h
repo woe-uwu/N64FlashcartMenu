@@ -75,6 +75,9 @@ typedef struct {
     bool rom_fast_reboot_enabled;
 #endif
 
+    /** @brief Current UI theme (0 = Default, 1 = Pastel, 2 = Dark Neon) */
+    int theme;
+
 } settings_t;
 
 

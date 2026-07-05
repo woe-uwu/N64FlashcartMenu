@@ -4,6 +4,8 @@
 #include "settings.h"
 #include "utils/fs.h"
 
+void apply_theme(int theme);  // Declaration for theme loader in common.c
+
 
 static char *settings_path = NULL;
 
@@ -34,6 +36,7 @@ static settings_t init = {
     .show_browser_file_extensions = true,
     .show_browser_rom_tags = true,
     .rumble_enabled = false,
+    .theme = 1,  // 0 = Default, 1 = Pastel, 2 = Dark Neon
 };
 
 
@@ -80,6 +83,9 @@ void settings_load (settings_t *settings) {
     settings->show_browser_file_extensions = ini_get_bool(ini, "menu", "show_browser_file_extensions", init.show_browser_file_extensions);
     settings->show_browser_rom_tags = ini_get_bool(ini, "menu", "show_browser_rom_tags", init.show_browser_rom_tags);
     settings->rumble_enabled = ini_get_bool(ini, "menu_beta_flag", "rumble_enabled", init.rumble_enabled);
+    settings->theme = ini_get_int(ini, "menu", "theme", init.theme);
+
+    apply_theme(settings->theme);  // Apply the theme colors
 
     ini_free(ini);
 }
@@ -108,6 +114,8 @@ void settings_save (settings_t *settings) {
 #else
     ini_set_bool(ini, "menu", "reboot_rom_enabled", settings->rom_fast_reboot_enabled);
 #endif
+
+    ini_set_int(ini, "menu", "theme", settings->theme);
 
     /* Beta feature flags, they should not save until production ready! */
     // ini_set_bool(ini, "menu", "show_browser_file_extensions", settings->show_browser_file_extensions);

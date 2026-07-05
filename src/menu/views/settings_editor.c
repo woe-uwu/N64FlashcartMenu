@@ -3,12 +3,23 @@
 #include "../settings.h"
 #include "views.h"
 
+void apply_theme(int theme);  // For theme switching
+
 static bool show_message_reset_settings = false;
 
 static const char *format_switch (bool state) {
     switch (state) {
         case true: return "On";
         case false: return "Off";
+    }
+}
+
+static const char *format_theme (int theme) {
+    switch (theme) {
+        case 0: return "Default";
+        case 1: return "Pastel";
+        case 2: return "Dark Neon";
+        default: return "Unknown";
     }
 }
 
@@ -92,6 +103,16 @@ static void set_pal60_type (menu_t *menu, void *arg) {
     settings_save(&menu->settings);
 }
 
+static void set_theme_type (menu_t *menu, void *arg) {
+    menu->settings.theme = (int)(uintptr_t)(arg);
+    apply_theme(menu->settings.theme);
+    settings_save(&menu->settings);
+
+    menu->browser.valid = false;  // Force reload of UI
+    menu->browser.reload = true;
+    menu->next_mode = MENU_MODE_BROWSER;  // Go back to browser to see change
+}
+
 #ifndef FEATURE_AUTOLOAD_ROM_ENABLED
 static void set_use_rom_fast_reboot_enabled_type (menu_t *menu, void *arg) {
     menu->settings.rom_fast_reboot_enabled = (bool)(uintptr_t)(arg);
@@ -157,6 +178,19 @@ static component_context_menu_t set_soundfx_enabled_type_context_menu = {
     .list = {
         {.text = "On", .action = set_soundfx_enabled_type, .arg = (void *)(uintptr_t)(true) },
         {.text = "Off", .action = set_soundfx_enabled_type, .arg = (void *)(uintptr_t)(false) },
+    COMPONENT_CONTEXT_MENU_LIST_END,
+}};
+
+static int get_theme_current_selection (menu_t *menu) {
+    return menu->settings.theme;
+}
+
+static component_context_menu_t set_theme_context_menu = {
+    .get_default_selection = get_theme_current_selection,
+    .list = {
+        {.text = "Default", .action = set_theme_type, .arg = (void *)(uintptr_t)(0) },
+        {.text = "Pastel", .action = set_theme_type, .arg = (void *)(uintptr_t)(1) },
+        {.text = "Dark Neon", .action = set_theme_type, .arg = (void *)(uintptr_t)(2) },
     COMPONENT_CONTEXT_MENU_LIST_END,
 }};
 
@@ -232,6 +266,7 @@ static component_context_menu_t set_pal60_type_context_menu = {
     COMPONENT_CONTEXT_MENU_LIST_END,
 }};
 
+
 #ifndef FEATURE_AUTOLOAD_ROM_ENABLED
 static int get_use_rom_fast_reboot_current_selection (menu_t *menu) {
     return menu->settings.rom_fast_reboot_enabled ? 0 : 1;
@@ -287,6 +322,7 @@ static component_context_menu_t set_rumble_enabled_type_context_menu = {
 static component_context_menu_t options_context_menu = { .list = {
     { .text = "Show Hidden Files", .submenu = &set_protected_entries_type_context_menu },
     { .text = "Sound Effects", .submenu = &set_soundfx_enabled_type_context_menu },
+    { .text = "Theme", .submenu = &set_theme_context_menu },
     { .text = "Background Music", .submenu = &set_bgm_enabled_type_context_menu },
     { .text = "Use Saves Folder", .submenu = &set_use_saves_folder_type_context_menu },
     { .text = "Show Saves Folder", .submenu = &set_show_saves_folder_type_context_menu },
@@ -357,6 +393,7 @@ static void draw (menu_t *menu, surface_t *d) {
         "To change the following menu settings, press 'A':\n"
         "     Show Hidden Files : %s\n"
         "     Sound Effects     : %s\n"
+        "     Theme             : %s\n"
         "     Background Music  : %s\n"
         "     Use Saves folder  : %s\n"
         "     Show Saves folder : %s\n"
@@ -380,6 +417,7 @@ static void draw (menu_t *menu, surface_t *d) {
         menu->settings.default_directory,
         format_switch(menu->settings.show_protected_entries),
         format_switch(menu->settings.soundfx_enabled),
+        format_theme(menu->settings.theme),
         format_switch(menu->settings.bgm_enabled),
         format_switch(menu->settings.use_saves_folder),
         format_switch(menu->settings.show_saves_folder),

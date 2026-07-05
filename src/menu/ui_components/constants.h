@@ -6,6 +6,8 @@
  * This header defines all layout, sizing, and color constants used by UI components.
  */
 
+ #include <libdragon.h>  // For color_t
+
 #ifndef COMPONENTS_CONSTANTS_H__
 #define COMPONENTS_CONSTANTS_H__
 
@@ -273,35 +275,22 @@
  */
 #define FILE_LIST_HIGHLIGHT_X           (VISIBLE_AREA_X0)
 
-/**
- * Colors - Full Soft Pastel Theme
- */
-
-// Backgrounds
-#define BACKGROUND_EMPTY_COLOR          RGBA32(0xF8, 0xF4, 0xFF, 0xFF)  // Light lavender
-#define BACKGROUND_OVERLAY_COLOR        RGBA32(0x20, 0x20, 0x35, 0xD0)  // Lighter dark overlay
-
-// Borders
-#define BORDER_COLOR                    RGBA32(0xC8, 0xB0, 0xE8, 0xFF)
-
-// Progress / Scroll
-#define PROGRESSBAR_BG_COLOR            RGBA32(0xE8, 0xE0, 0xF0, 0xFF)
-#define PROGRESSBAR_DONE_COLOR          RGBA32(0xA0, 0xE0, 0xC8, 0xFF)
-
-#define SCROLLBAR_BG_COLOR              RGBA32(0xE0, 0xE0, 0xF0, 0xFF)
-#define SCROLLBAR_INACTIVE_COLOR        RGBA32(0xD0, 0xD0, 0xE8, 0xFF)
-#define SCROLLBAR_POSITION_COLOR        RGBA32(0xB0, 0xD0, 0xFF, 0xFF)
-
-// Dialogs & Highlights
-#define DIALOG_BG_COLOR                 RGBA32(0xFF, 0xF8, 0xF8, 0xF0)
-#define FILE_LIST_HIGHLIGHT_COLOR       RGBA32(0xE8, 0xD8, 0xFF, 0x88)
-#define CONTEXT_MENU_HIGHLIGHT_COLOR    RGBA32(0xE0, 0xF0, 0xFF, 0x99)
-#define BOXART_LOADING_COLOR            RGBA32(0xF0, 0xE8, 0xFF, 0xFF)
-
-// Tabs
-#define TAB_INACTIVE_BORDER_COLOR       RGBA32(0xD8, 0xC8, 0xE8, 0xFF)
-#define TAB_ACTIVE_BORDER_COLOR         RGBA32(0xC0, 0xA8, 0xE0, 0xFF)
-#define TAB_INACTIVE_BACKGROUND_COLOR   RGBA32(0xF0, 0xE8, 0xF8, 0xFF)
-#define TAB_ACTIVE_BACKGROUND_COLOR     RGBA32(0xE0, 0xF0, 0xFF, 0xFF)
+// Runtime color variables for theme switching
+extern color_t BACKGROUND_EMPTY_COLOR;
+extern color_t BACKGROUND_OVERLAY_COLOR;
+extern color_t BORDER_COLOR;
+extern color_t PROGRESSBAR_BG_COLOR;
+extern color_t PROGRESSBAR_DONE_COLOR;
+extern color_t SCROLLBAR_BG_COLOR;
+extern color_t SCROLLBAR_INACTIVE_COLOR;
+extern color_t SCROLLBAR_POSITION_COLOR;
+extern color_t DIALOG_BG_COLOR;
+extern color_t FILE_LIST_HIGHLIGHT_COLOR;
+extern color_t CONTEXT_MENU_HIGHLIGHT_COLOR;
+extern color_t BOXART_LOADING_COLOR;
+extern color_t TAB_INACTIVE_BORDER_COLOR;
+extern color_t TAB_ACTIVE_BORDER_COLOR;
+extern color_t TAB_INACTIVE_BACKGROUND_COLOR;
+extern color_t TAB_ACTIVE_BACKGROUND_COLOR;
 
 #endif /* COMPONENTS_CONSTANTS_H__ */
