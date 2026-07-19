@@ -19,6 +19,8 @@ static const char *format_theme (int theme) {
         case 0: return "Default";
         case 1: return "Pastel";
         case 2: return "Dark Neon";
+        case 3: return "Retro";
+        case 4: return "Dark Mode";
         default: return "Unknown";
     }
 }
@@ -191,6 +193,8 @@ static component_context_menu_t set_theme_context_menu = {
         {.text = "Default", .action = set_theme_type, .arg = (void *)(uintptr_t)(0) },
         {.text = "Pastel", .action = set_theme_type, .arg = (void *)(uintptr_t)(1) },
         {.text = "Dark Neon", .action = set_theme_type, .arg = (void *)(uintptr_t)(2) },
+        {.text = "Retro", .action = set_theme_type, .arg = (void *)(uintptr_t)(3) },
+        {.text = "Dark Mode", .action = set_theme_type, .arg = (void *)(uintptr_t)(4) },
     COMPONENT_CONTEXT_MENU_LIST_END,
 }};
 
