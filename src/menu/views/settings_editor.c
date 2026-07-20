@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include "../sound.h"
 #include "../settings.h"
+#include "../path.h"
 #include "views.h"
 
 void apply_theme(int theme);  // For theme switching
@@ -112,10 +113,36 @@ static void set_pal60_type (menu_t *menu, void *arg) {
     settings_save(&menu->settings);
 }
 
+static const char *theme_background_file_name(int theme) {
+    switch (theme) {
+        case 0: return "background-default.png";
+        case 1: return "background-pastel.png";
+        case 2: return "background-dark-neon.png";
+        case 3: return "background-retro.png";
+        case 4: return "background-dark-mode.png";
+        case 5: return "background-forest.png";
+        case 6: return "background-ocean.png";
+        default: return NULL;
+    }
+}
+
+static void load_theme_background(menu_t *menu) {
+    const char *file_name = theme_background_file_name(menu->settings.theme);
+    if (!file_name) {
+        return;
+    }
+
+    path_t *path = path_init(menu->storage_prefix, "menu");
+    path_push(path, (char *) file_name);
+    ui_components_background_load_from_file(path_get(path));
+    path_free(path);
+}
+
 static void set_theme_type (menu_t *menu, void *arg) {
     menu->settings.theme = (int)(uintptr_t)(arg);
     apply_theme(menu->settings.theme);
     settings_save(&menu->settings);
+    load_theme_background(menu);
 
     menu->browser.valid = false;  // Force reload of UI
     menu->browser.reload = true;

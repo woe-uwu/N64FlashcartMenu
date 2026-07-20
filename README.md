@@ -39,6 +39,7 @@ The current state of support is:
 * Emulator support (NES, SNES, GB, GBC, SMS, GG, CHF) ROMs.
 * N64 ROM box art image support.
 * Background image (PNG) support.
+* Custom theme backgrounds from `sd:/menu/background-<theme>.png`.
 * Comprehensive ROM save database (including homebrew headers).
 * Comprehensive ROM information display.
 * Real Time Clock support.

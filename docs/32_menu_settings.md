@@ -56,6 +56,22 @@ OFF: ROM saves are saved alongside the ROM file.
 
 The menu has default sound effects to improve the user experience. See the [sound documentation](./40_sound.md) for details. This setting is OFF by default.
 
+### Theme
+
+N64FlashcartMenu includes several visual themes. When you change the theme in the menu settings, the interface colors update immediately.
+
+If the file `sd:/menu/background-<theme>.png` exists for the selected theme, it will be loaded as the menu background in place of the default solid fill. The supported theme background filenames are:
+
+- `background-default.png`
+- `background-pastel.png`
+- `background-dark-neon.png`
+- `background-retro.png`
+- `background-dark-mode.png`
+- `background-forest.png`
+- `background-ocean.png`
+
+Each file must be a `640x480` PNG image placed directly in the `sd:/menu/` folder.
+
 ### Fast ROM reboots
 
 Certain flashcarts support the ability to use the N64 `RESET` button for re-loading the last game, rather than returning to the menu. When enabled (and if supported by your flashcart), the power switch must be toggled to return to the menu.

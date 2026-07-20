@@ -8,6 +8,7 @@
 #include <stdlib.h>
 
 #include "../ui_components.h"
+#include "../png_decoder.h"
 #include "constants.h"
 #include "utils/fs.h"
 
@@ -20,6 +21,7 @@ typedef struct {
     char *cache_location;      /**< Path to the cache file location. */
     surface_t *image;          /**< Pointer to the loaded image surface. */
     rspq_block_t *image_display_list; /**< Display list for rendering the image. */
+    bool theme_background_active; /**< True when the image comes from a theme file. */
 } component_background_t;
 
 /**
@@ -184,6 +186,56 @@ static void display_list_free(void *arg) {
     rspq_block_free((rspq_block_t *) (arg));
 }
 
+static void replace_background_image(component_background_t *c, surface_t *image, bool save, bool theme_background) {
+    if (c->image) {
+        surface_free(c->image);
+        free(c->image);
+        c->image = NULL;
+    }
+
+    if (c->image_display_list) {
+        rdpq_call_deferred(display_list_free, c->image_display_list);
+        c->image_display_list = NULL;
+    }
+
+    c->image = image;
+    c->theme_background_active = theme_background;
+    if (save) {
+        save_to_cache(c);
+    }
+    prepare_background(c);
+}
+
+static void theme_background_callback(png_err_t err, surface_t *decoded_image, void *callback_data) {
+    (void) callback_data;
+
+    if (err == PNG_OK && decoded_image != NULL) {
+        replace_background_image(background, decoded_image, false, true);
+    } else if (decoded_image != NULL) {
+        surface_free(decoded_image);
+        free(decoded_image);
+    }
+}
+
+bool ui_components_background_has_image(void) {
+    return background && background->image != NULL;
+}
+
+bool ui_components_background_is_theme_active(void) {
+    return background && background->theme_background_active;
+}
+
+void ui_components_background_load_from_file(char *path) {
+    if (!path || !file_exists(path)) {
+        return;
+    }
+
+    png_err_t err = png_decoder_start(path, DISPLAY_WIDTH, DISPLAY_HEIGHT, theme_background_callback, NULL);
+    if (err != PNG_OK) {
+        // Ignore load failures and preserve the current background.
+    }
+}
+
 /**
  * @brief Initialize the background component and load from cache.
  *
@@ -193,6 +245,7 @@ void ui_components_background_init(char *cache_location) {
     if (!background) {
         background = calloc(1, sizeof(component_background_t));
         background->cache_location = strdup(cache_location);
+        background->theme_background_active = false;
         load_from_cache(background);
         prepare_background(background);
     }
@@ -230,20 +283,7 @@ void ui_components_background_replace_image(surface_t *image) {
         return;
     }
 
-    if (background->image) {
-        surface_free(background->image);
-        free(background->image);
-        background->image = NULL;
-    }
-
-    if (background->image_display_list) {
-        rdpq_call_deferred(display_list_free, background->image_display_list);
-        background->image_display_list = NULL;
-    }
-
-    background->image = image;
-    save_to_cache(background);
-    prepare_background(background);
+    replace_background_image(background, image, true, false);
 }
 
 /**

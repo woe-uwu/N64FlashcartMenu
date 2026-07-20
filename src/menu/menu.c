@@ -33,6 +33,33 @@
 #define MENU_CACHE_DIRECTORY        "cache"
 #define BACKGROUND_CACHE_FILE       "background.data"
 
+static const char *theme_background_file_name(int theme) {
+    switch (theme) {
+        case 0: return "background-default.png";
+        case 1: return "background-pastel.png";
+        case 2: return "background-dark-neon.png";
+        case 3: return "background-retro.png";
+        case 4: return "background-dark-mode.png";
+        case 5: return "background-forest.png";
+        case 6: return "background-ocean.png";
+        default: return NULL;
+    }
+}
+
+static void menu_load_theme_background(menu_t *menu) {
+    const char *file_name = theme_background_file_name(menu->settings.theme);
+    if (!file_name) {
+        return;
+    }
+
+    path_t *path = path_init(menu->storage_prefix, "menu");
+    path_push(path, (char *) file_name);
+
+    ui_components_background_load_from_file(path_get(path));
+
+    path_free(path);
+}
+
 #define FPS_LIMIT                   (30.0f)
 
 static menu_t *menu;
@@ -121,6 +148,10 @@ static void menu_init (boot_params_t *boot_params) {
 
     path_push(path, BACKGROUND_CACHE_FILE);
     ui_components_background_init(path_get(path));
+
+    if (!ui_components_background_has_image() || ui_components_background_is_theme_active()) {
+        menu_load_theme_background(menu);
+    }
 
     path_free(path);
 

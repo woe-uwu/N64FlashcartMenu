@@ -205,6 +205,23 @@ void ui_components_background_free(void);
 void ui_components_background_replace_image(surface_t *image);
 
 /**
+ * @brief Load a background image from a PNG file and replace the current background.
+ * 
+ * @param path File path to a PNG background image.
+ */
+void ui_components_background_load_from_file(char *path);
+
+/**
+ * @brief Return true if a background image is currently loaded.
+ */
+bool ui_components_background_has_image(void);
+
+/**
+ * @brief Return true if the current background was loaded from a theme background file.
+ */
+bool ui_components_background_is_theme_active(void);
+
+/**
  * @brief Draw the background component.
  */
 void ui_components_background_draw(void);
