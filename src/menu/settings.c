@@ -13,6 +13,7 @@ static char *settings_path = NULL;
 static settings_t init = {
     .schema_revision = 1,
     .first_run = true,
+    .splash_screen_enabled = true,
     .pal60_enabled = false,
     .force_progressive_scan = false,
     .show_protected_entries = false,
@@ -56,6 +57,7 @@ void settings_load (settings_t *settings) {
 
     settings->schema_revision = ini_get_int(ini, "menu", "schema_revision", init.schema_revision);
     settings->first_run = ini_get_bool(ini, "menu", "first_run", init.first_run);
+    settings->splash_screen_enabled = ini_get_bool(ini, "menu", "show_splash_screen", init.splash_screen_enabled);
     settings->pal60_enabled = ini_get_bool(ini, "menu", "pal60", init.pal60_enabled);
     settings->force_progressive_scan = ini_get_bool(ini, "menu", "force_progressive_scan", init.force_progressive_scan);
     settings->show_protected_entries = ini_get_bool(ini, "menu", "show_protected_entries", init.show_protected_entries);
@@ -95,6 +97,7 @@ void settings_save (settings_t *settings) {
 
     ini_set_int(ini, "menu", "schema_revision", settings->schema_revision);
     ini_set_bool(ini, "menu", "first_run", settings->first_run);
+    ini_set_bool(ini, "menu", "show_splash_screen", settings->splash_screen_enabled);
     ini_set_bool(ini, "menu", "pal60", settings->pal60_enabled);
     ini_set_bool(ini, "menu", "force_progressive_scan", settings->force_progressive_scan);
     ini_set_bool(ini, "menu", "show_protected_entries", settings->show_protected_entries);

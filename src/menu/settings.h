@@ -16,6 +16,9 @@ typedef struct {
     /** @brief First run of the menu */
     bool first_run;
 
+    /** @brief Show the splash screen on startup */
+    bool splash_screen_enabled;
+
     /** @brief Use 60 Hz refresh rate on a PAL console */
     bool pal60_enabled;
 
