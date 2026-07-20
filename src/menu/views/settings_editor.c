@@ -21,6 +21,8 @@ static const char *format_theme (int theme) {
         case 2: return "Dark Neon";
         case 3: return "Retro";
         case 4: return "Dark Mode";
+        case 5: return "Forest";
+        case 6: return "Ocean";
         default: return "Unknown";
     }
 }
@@ -191,10 +193,12 @@ static component_context_menu_t set_theme_context_menu = {
     .get_default_selection = get_theme_current_selection,
     .list = {
         {.text = "Default", .action = set_theme_type, .arg = (void *)(uintptr_t)(0) },
-        {.text = "Pastel", .action = set_theme_type, .arg = (void *)(uintptr_t)(1) },
-        {.text = "Dark Neon", .action = set_theme_type, .arg = (void *)(uintptr_t)(2) },
-        {.text = "Retro", .action = set_theme_type, .arg = (void *)(uintptr_t)(3) },
         {.text = "Dark Mode", .action = set_theme_type, .arg = (void *)(uintptr_t)(4) },
+        {.text = "Dark Neon", .action = set_theme_type, .arg = (void *)(uintptr_t)(2) },
+        {.text = "Forest", .action = set_theme_type, .arg = (void *)(uintptr_t)(5) },
+        {.text = "Ocean", .action = set_theme_type, .arg = (void *)(uintptr_t)(6) },
+        {.text = "Pastel", .action = set_theme_type, .arg = (void *)(uintptr_t)(1) },
+        {.text = "Retro", .action = set_theme_type, .arg = (void *)(uintptr_t)(3) },
     COMPONENT_CONTEXT_MENU_LIST_END,
 }};
 

@@ -547,5 +547,27 @@ void apply_theme(int theme) {
             TAB_ACTIVE_BACKGROUND_COLOR = RGBA32(0x30, 0x30, 0x30, 0xFF);
             TAB_ACTIVE_BORDER_COLOR = RGBA32(0xAA, 0xAA, 0xAA, 0xFF);
             break;
+
+        case 5: // Forest
+            BACKGROUND_EMPTY_COLOR = RGBA32(0x08, 0x18, 0x10, 0xFF);
+            BACKGROUND_OVERLAY_COLOR = RGBA32(0x02, 0x06, 0x03, 0xD0);
+            BORDER_COLOR = RGBA32(0x8A, 0xB0, 0x7A, 0xFF);
+            PROGRESSBAR_DONE_COLOR = RGBA32(0x6A, 0xB8, 0x6A, 0xFF);
+            SCROLLBAR_POSITION_COLOR = RGBA32(0xA4, 0xD5, 0x88, 0xFF);
+            FILE_LIST_HIGHLIGHT_COLOR = RGBA32(0x7C, 0xB8, 0x8C, 0x88);
+            TAB_ACTIVE_BACKGROUND_COLOR = RGBA32(0x20, 0x40, 0x2C, 0xFF);
+            TAB_ACTIVE_BORDER_COLOR = RGBA32(0x8A, 0xC4, 0x8A, 0xFF);
+            break;
+
+        case 6: // Ocean
+            BACKGROUND_EMPTY_COLOR = RGBA32(0x04, 0x18, 0x30, 0xFF);
+            BACKGROUND_OVERLAY_COLOR = RGBA32(0x00, 0x06, 0x10, 0xD8);
+            BORDER_COLOR = RGBA32(0x4C, 0xC4, 0xD8, 0xFF);
+            PROGRESSBAR_DONE_COLOR = RGBA32(0x20, 0xA0, 0xE0, 0xFF);
+            SCROLLBAR_POSITION_COLOR = RGBA32(0x70, 0xD0, 0xFF, 0xFF);
+            FILE_LIST_HIGHLIGHT_COLOR = RGBA32(0x50, 0xA8, 0xE8, 0x88);
+            TAB_ACTIVE_BACKGROUND_COLOR = RGBA32(0x10, 0x40, 0x60, 0xFF);
+            TAB_ACTIVE_BORDER_COLOR = RGBA32(0x6E, 0xD0, 0xFF, 0xFF);
+            break;
     }
 }
