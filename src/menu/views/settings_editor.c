@@ -75,6 +75,7 @@ static void set_soundfx_enabled_type (menu_t *menu, void *arg) {
 
 static void set_bgm_enabled_type (menu_t *menu, void *arg) {
     menu->settings.bgm_enabled = (bool)(uintptr_t)(arg);
+    sound_use_bgm(menu->settings.bgm_enabled);
     settings_save(&menu->settings);
 }
 
@@ -117,6 +118,11 @@ static void set_theme_type (menu_t *menu, void *arg) {
     menu->next_mode = MENU_MODE_BROWSER;  // Go back to browser to see change
 }
 
+static void set_wrap_file_list_scrolling_type (menu_t *menu, void *arg) {
+    menu->settings.wrap_file_list_scrolling = (bool)(uintptr_t)(arg);
+    settings_save(&menu->settings);
+}
+
 #ifndef FEATURE_AUTOLOAD_ROM_ENABLED
 static void set_use_rom_fast_reboot_enabled_type (menu_t *menu, void *arg) {
     menu->settings.rom_fast_reboot_enabled = (bool)(uintptr_t)(arg);
@@ -146,6 +152,12 @@ static void set_rumble_enabled_type (menu_t *menu, void *arg) {
 //     menu->browser.reload = true;
 // }
 #endif
+
+static void remove_background_image (menu_t *menu, void *arg) {
+    (void)arg;
+    (void)menu;
+    ui_components_background_clear();
+}
 
 #ifdef FEATURE_AUTOLOAD_ROM_ENABLED
 static int get_loading_progress_bar_enabled_current_selection (menu_t *menu) {
@@ -274,6 +286,17 @@ static component_context_menu_t set_pal60_type_context_menu = {
     COMPONENT_CONTEXT_MENU_LIST_END,
 }};
 
+static int get_wrap_file_list_scrolling_current_selection (menu_t *menu) {
+    return menu->settings.wrap_file_list_scrolling ? 0 : 1;
+}
+
+static component_context_menu_t set_wrap_file_list_scrolling_context_menu = {
+    .get_default_selection = get_wrap_file_list_scrolling_current_selection,
+    .list = {
+        {.text = "On", .action = set_wrap_file_list_scrolling_type, .arg = (void *)(uintptr_t)(true) },
+        {.text = "Off", .action = set_wrap_file_list_scrolling_type, .arg = (void *)(uintptr_t)(false) },
+    COMPONENT_CONTEXT_MENU_LIST_END,
+}};
 
 #ifndef FEATURE_AUTOLOAD_ROM_ENABLED
 static int get_use_rom_fast_reboot_current_selection (menu_t *menu) {
@@ -337,6 +360,7 @@ static component_context_menu_t options_context_menu = { .list = {
     { .text = "Show Save Files", .submenu = &set_show_save_files_type_context_menu },
     { .text = "Show Cheat Files", .submenu = &set_show_cheat_files_type_context_menu },
     { .text = "PAL60 Mode", .submenu = &set_pal60_type_context_menu },
+    { .text = "Wrap File List", .submenu = &set_wrap_file_list_scrolling_context_menu },
     #ifdef FEATURE_AUTOLOAD_ROM_ENABLED
     { .text = "ROM Loading Bar", .submenu = &set_loading_progress_bar_enabled_context_menu },
 #else
@@ -348,6 +372,7 @@ static component_context_menu_t options_context_menu = { .list = {
     { .text = "Rumble Feedback", .submenu = &set_rumble_enabled_type_context_menu },
     // { .text = "Restore Defaults", .action = set_use_default_settings },
 #endif
+    { .text = "Remove Background", .action = remove_background_image },
 
     COMPONENT_CONTEXT_MENU_LIST_END,
 }};
@@ -408,6 +433,7 @@ static void draw (menu_t *menu, surface_t *d) {
         "     Show Save files   : %s\n"
         "     Show Cheat files  : %s\n"
         "*    PAL60 Mode        : %s\n"
+        "     Wrap File List    : %s\n"
 #ifdef FEATURE_AUTOLOAD_ROM_ENABLED
         "     Autoload ROM      : %s\n\n"
         "     ROM Loading Bar   : %s\n"
@@ -432,6 +458,7 @@ static void draw (menu_t *menu, surface_t *d) {
         format_switch(menu->settings.show_save_files),
         format_switch(menu->settings.show_cheat_files),
         format_switch(menu->settings.pal60_enabled),
+        format_switch(menu->settings.wrap_file_list_scrolling),
 #ifdef FEATURE_AUTOLOAD_ROM_ENABLED
         format_switch(menu->settings.rom_autoload_enabled),
         format_switch(menu->settings.loading_progress_bar_enabled)
