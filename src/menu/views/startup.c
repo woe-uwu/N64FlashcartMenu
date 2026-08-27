@@ -125,23 +125,15 @@ static void finish_startup (menu_t *menu) {
 }
 
 void view_startup_init (menu_t *menu) {
-    if (menu->settings.splash_screen_enabled) {
-        splash_load(menu);
-    }
+    splash_load(menu);
 }
 
 void view_startup_display (menu_t *menu, surface_t *display) {
-    if (!menu->settings.splash_screen_enabled) {
-        rdpq_attach_clear(display, NULL);
-        rdpq_detach_show();
-        finish_startup(menu);
-        return;
-    }
-
     if (!splash_start_ticks) {
         splash_load(menu);
     }
 
+    joypad_poll();
     bool skip_splash = false;
 
     JOYPAD_PORT_FOREACH (port) {
@@ -153,7 +145,7 @@ void view_startup_display (menu_t *menu, surface_t *display) {
 
     draw(menu, display);
 
-    if (skip_splash) {
+    if ((splash_image_loaded || splash_image_failed) && skip_splash) {
         splash_deinit();
         finish_startup(menu);
         return;

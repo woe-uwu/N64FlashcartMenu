@@ -1,7 +1,6 @@
 #include <stdbool.h>
 #include "../sound.h"
 #include "../settings.h"
-#include "../path.h"
 #include "views.h"
 
 void apply_theme(int theme);  // For theme switching
@@ -74,11 +73,6 @@ static void set_soundfx_enabled_type (menu_t *menu, void *arg) {
     settings_save(&menu->settings);
 }
 
-static void set_splash_screen_enabled_type (menu_t *menu, void *arg) {
-    menu->settings.splash_screen_enabled = (bool)(uintptr_t)(arg);
-    settings_save(&menu->settings);
-}
-
 static void set_bgm_enabled_type (menu_t *menu, void *arg) {
     menu->settings.bgm_enabled = (bool)(uintptr_t)(arg);
     settings_save(&menu->settings);
@@ -113,36 +107,10 @@ static void set_pal60_type (menu_t *menu, void *arg) {
     settings_save(&menu->settings);
 }
 
-static const char *theme_background_file_name(int theme) {
-    switch (theme) {
-        case 0: return "background-default.png";
-        case 1: return "background-pastel.png";
-        case 2: return "background-dark-neon.png";
-        case 3: return "background-retro.png";
-        case 4: return "background-dark-mode.png";
-        case 5: return "background-forest.png";
-        case 6: return "background-ocean.png";
-        default: return NULL;
-    }
-}
-
-static void load_theme_background(menu_t *menu) {
-    const char *file_name = theme_background_file_name(menu->settings.theme);
-    if (!file_name) {
-        return;
-    }
-
-    path_t *path = path_init(menu->storage_prefix, "menu");
-    path_push(path, (char *) file_name);
-    ui_components_background_load_from_file(path_get(path));
-    path_free(path);
-}
-
 static void set_theme_type (menu_t *menu, void *arg) {
     menu->settings.theme = (int)(uintptr_t)(arg);
     apply_theme(menu->settings.theme);
     settings_save(&menu->settings);
-    load_theme_background(menu);
 
     menu->browser.valid = false;  // Force reload of UI
     menu->browser.reload = true;
@@ -208,18 +176,6 @@ static component_context_menu_t set_protected_entries_type_context_menu = {
 static int get_soundfx_enabled_current_selection (menu_t *menu) {
     return menu->settings.soundfx_enabled ? 0 : 1;
 }
-
-static int get_splash_screen_enabled_current_selection (menu_t *menu) {
-    return menu->settings.splash_screen_enabled ? 0 : 1;
-}
-
-static component_context_menu_t set_splash_screen_enabled_type_context_menu = {
-    .get_default_selection = get_splash_screen_enabled_current_selection,
-    .list = {
-        {.text = "On", .action = set_splash_screen_enabled_type, .arg = (void *)(uintptr_t)(true) },
-        {.text = "Off", .action = set_splash_screen_enabled_type, .arg = (void *)(uintptr_t)(false) },
-    COMPONENT_CONTEXT_MENU_LIST_END,
-}};
 
 static component_context_menu_t set_soundfx_enabled_type_context_menu = {
     .get_default_selection = get_soundfx_enabled_current_selection,
@@ -374,7 +330,6 @@ static component_context_menu_t set_rumble_enabled_type_context_menu = {
 static component_context_menu_t options_context_menu = { .list = {
     { .text = "Show Hidden Files", .submenu = &set_protected_entries_type_context_menu },
     { .text = "Sound Effects", .submenu = &set_soundfx_enabled_type_context_menu },
-    { .text = "Show Splash Screen", .submenu = &set_splash_screen_enabled_type_context_menu },
     { .text = "Theme", .submenu = &set_theme_context_menu },
     { .text = "Background Music", .submenu = &set_bgm_enabled_type_context_menu },
     { .text = "Use Saves Folder", .submenu = &set_use_saves_folder_type_context_menu },
@@ -446,7 +401,6 @@ static void draw (menu_t *menu, surface_t *d) {
         "To change the following menu settings, press 'A':\n"
         "     Show Hidden Files : %s\n"
         "     Sound Effects     : %s\n"
-        "     Show Splash Screen: %s\n"
         "     Theme             : %s\n"
         "     Background Music  : %s\n"
         "     Use Saves folder  : %s\n"
@@ -471,7 +425,6 @@ static void draw (menu_t *menu, surface_t *d) {
         menu->settings.default_directory,
         format_switch(menu->settings.show_protected_entries),
         format_switch(menu->settings.soundfx_enabled),
-        format_switch(menu->settings.splash_screen_enabled),
         format_theme(menu->settings.theme),
         format_switch(menu->settings.bgm_enabled),
         format_switch(menu->settings.use_saves_folder),
