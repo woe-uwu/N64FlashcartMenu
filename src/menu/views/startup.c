@@ -145,7 +145,7 @@ void view_startup_display (menu_t *menu, surface_t *display) {
 
     draw(menu, display);
 
-    if ((splash_image_loaded || splash_image_failed) && skip_splash) {
+    if (skip_splash) {
         splash_deinit();
         finish_startup(menu);
         return;
