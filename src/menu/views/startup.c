@@ -133,7 +133,6 @@ void view_startup_display (menu_t *menu, surface_t *display) {
         splash_load(menu);
     }
 
-    joypad_poll();
     bool skip_splash = false;
 
     JOYPAD_PORT_FOREACH (port) {
