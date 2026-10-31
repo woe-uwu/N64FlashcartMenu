@@ -187,8 +187,6 @@ static void draw(menu_t *menu, surface_t *display) {
         }
     }
 
-        // Removed tab change hint for cleaner look
-
     rdpq_detach_show();   
 }
 
