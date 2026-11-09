@@ -157,6 +157,7 @@ typedef struct {
         bool transfer_pak;          /**< Supports Transfer Pak */
         bool voice_recognition_unit; /**< Supports Voice Recognition Unit */
         bool real_time_clock;       /**< Supports Real Time Clock */
+        bool region_free;           /**< Homebrew ROM is configured as region-free */
         bool disk_conversion;       /**< Supports Disk Conversion */
         bool combo_rom_disk_game;   /**< Supports Combo ROM/Disk Game */
         rom_expansion_pak_t expansion_pak; /**< Expansion Pak requirements */
@@ -197,6 +198,10 @@ bool rom_info_metadata_image_exists(const rom_info_t *rom_info, const char *file
 /** Check whether a named entry in the ROM's embedded metadata ZIP is PNG, by content (file
  *  signature), not by filename, without extracting the whole entry. */
 bool rom_info_metadata_image_is_png(const rom_info_t *rom_info, const char *filename);
+
+/** Check whether a named entry in the ROM's embedded metadata ZIP is JPEG, by content (file
+ *  signature), not by filename, without extracting the whole entry. */
+bool rom_info_metadata_image_is_jpeg(const rom_info_t *rom_info, const char *filename);
 
 /**
  * @brief Get the CIC seed for the ROM.

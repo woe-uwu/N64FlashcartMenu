@@ -35,11 +35,11 @@ static bool metadata_image_available[METADATA_IMAGE_CACHE_MAX];
 static uint16_t metadata_image_count;
 static bool metadata_images_scanned = false;
 
-/** Embedded metadata images only support PNG; JPEG decoding is not implemented (jpeg_decoder.c is a stub).
- *  Validated by content (PNG file signature), not by filename, so a mis-named or
- *  extension-less entry isn't wrongly excluded or accepted. */
+/** Embedded metadata images may be PNG or JPEG. Validated by content (file signature),
+ * not by filename, so a mis-named or extension-less entry isn't wrongly excluded or accepted. */
 static bool is_unsupported_embedded_image(const rom_info_t *rom_info, const char *filename) {
-    return !rom_info_metadata_image_is_png(rom_info, filename);
+    return !rom_info_metadata_image_is_png(rom_info, filename) &&
+           !rom_info_metadata_image_is_jpeg(rom_info, filename);
 }
 
 static void scan_metadata_images(menu_t *menu) {
@@ -227,12 +227,12 @@ static const char *format_rom_save_type (rom_save_type_t save_type, bool support
     }
 }
 
-static const char *format_rom_tv_type (rom_tv_type_t tv_type) {
+static const char *format_rom_tv_type (rom_tv_type_t tv_type, bool region_free) {
     switch (tv_type) {
-        case ROM_TV_TYPE_PAL: return "PAL";
-        case ROM_TV_TYPE_NTSC: return "NTSC";
-        case ROM_TV_TYPE_MPAL: return "MPAL";
-        default: return "Unknown";
+        case ROM_TV_TYPE_PAL: return region_free ? "PAL (Region-free)" : "PAL";
+        case ROM_TV_TYPE_NTSC: return region_free ? "NTSC (Region-free)" : "NTSC";
+        case ROM_TV_TYPE_MPAL: return region_free ? "MPAL (Region-free)" : "MPAL";
+        default: return region_free ? "Global (Region-free)" : "Unknown";
     }
 }
 
@@ -240,7 +240,7 @@ static const char *format_rom_expansion_pak_info (rom_expansion_pak_t expansion_
     switch (expansion_pak_info) {
         case EXPANSION_PAK_REQUIRED: return "Required"; // This ROM requires the Expansion Pak to run.
         case EXPANSION_PAK_RECOMMENDED: return "Recommended"; // This ROM will run without the Expansion Pak, but will have limited functionality or performance.
-        case EXPANSION_PAK_UNUSED: return "Unused"; // This ROM will does not use the Expansion Pak.
+        case EXPANSION_PAK_UNUSED: return "Not used"; // This ROM does not use the Expansion Pak.
         case EXPANSION_PAK_FAULTY: return "May require ROM patch";
         default: return "Unspecified"; // This ROM will probably run without the Expansion Pak, and will have full functionality.
     }
@@ -767,7 +767,7 @@ static void draw (menu_t *menu, surface_t *d) {
             ,
             
             format_rom_save_type(rom_info_get_save_type(&menu->load.rom_info), menu->load.rom_info.features.controller_pak),
-            format_rom_tv_type(rom_info_get_tv_type(&menu->load.rom_info)),
+            format_rom_tv_type(rom_info_get_tv_type(&menu->load.rom_info), menu->load.rom_info.features.region_free),
             format_rom_expansion_pak_info(menu->load.rom_info.features.expansion_pak),
             format_rom_pak_feature_info(menu->load.rom_info.features.rumble_pak),
             format_rom_pak_feature_info(menu->load.rom_info.features.transfer_pak),

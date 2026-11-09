@@ -722,10 +722,18 @@ static rom_tv_type_t determine_tv_type (rom_destination_type_t rom_destination_c
 
 static void extract_rom_info (match_t *match, rom_header_t *rom_header, rom_info_t *rom_info) {
     rom_info->cic_type = detect_cic_type(rom_header->ipl3);
+    rom_info->features.region_free = false;
 
     if (match->type == MATCH_TYPE_HOMEBREW_HEADER) {
         if (rom_header->version & (1 << 0)) {
             match->data.feat |= FEAT_RTC;
+        }
+        rom_info->features.region_free = (rom_header->version & (1 << 1)) != 0;
+        switch ((rom_header->version & 0x0C) >> 2) {
+            case 1: match->data.feat |= FEAT_EXP_PAK_UNUSED; break;
+            case 2: match->data.feat |= FEAT_EXP_PAK_RECOMMENDED; break;
+            case 3: match->data.feat |= FEAT_EXP_PAK_REQUIRED; break;
+            default: break;
         }
         switch ((rom_header->version & 0xF0) >> 4) {
             case 0: match->data.save = SAVE_TYPE_NONE; break;
@@ -1249,7 +1257,8 @@ bool rom_info_metadata_image_exists(const rom_info_t *rom_info, const char *file
     return exists;
 }
 
-bool rom_info_metadata_image_is_png(const rom_info_t *rom_info, const char *filename) {
+static bool rom_info_metadata_image_has_signature(const rom_info_t *rom_info, const char *filename,
+                                                 const uint8_t *signature, size_t signature_len) {
     if (!rom_info || !rom_info->meta.metadata_zip_path || !filename ||
         filename[0] == '/' || strstr(filename, "..") != NULL) {
         return false;
@@ -1259,21 +1268,28 @@ bool rom_info_metadata_image_is_png(const rom_info_t *rom_info, const char *file
     if (!mz_zip_reader_init_file(&zip, rom_info->meta.metadata_zip_path, 0)) return false;
 
     mz_uint index = mz_zip_reader_locate_file(&zip, filename, NULL, MZ_ZIP_FLAG_CASE_SENSITIVE);
-    bool is_png = false;
+    bool matches = false;
     if (index != MZ_UINT32_MAX) {
-        // Read just the PNG file signature (8 bytes) via the streaming iterator API, so we
-        // don't need to decompress the whole entry just to check its content type.
-        static const uint8_t png_signature[8] = { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
-        uint8_t header[sizeof(png_signature)];
+        uint8_t header[8] = {0};
         mz_zip_reader_extract_iter_state *iter = mz_zip_reader_extract_iter_new(&zip, index, 0);
         if (iter) {
-            is_png = mz_zip_reader_extract_iter_read(iter, header, sizeof(header)) == sizeof(header) &&
-                     memcmp(header, png_signature, sizeof(header)) == 0;
+            matches = mz_zip_reader_extract_iter_read(iter, header, signature_len) == signature_len &&
+                      memcmp(header, signature, signature_len) == 0;
             mz_zip_reader_extract_iter_free(iter);
         }
     }
     mz_zip_reader_end(&zip);
-    return is_png;
+    return matches;
+}
+
+bool rom_info_metadata_image_is_png(const rom_info_t *rom_info, const char *filename) {
+    static const uint8_t png_signature[8] = { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
+    return rom_info_metadata_image_has_signature(rom_info, filename, png_signature, sizeof(png_signature));
+}
+
+bool rom_info_metadata_image_is_jpeg(const rom_info_t *rom_info, const char *filename) {
+    static const uint8_t jpeg_signature[3] = { 0xFF, 0xD8, 0xFF };
+    return rom_info_metadata_image_has_signature(rom_info, filename, jpeg_signature, sizeof(jpeg_signature));
 }
 
 void rom_info_free_meta(rom_info_t *rom_info) {
