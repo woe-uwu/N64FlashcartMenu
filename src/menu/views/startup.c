@@ -1,7 +1,7 @@
 #include <libdragon.h>
 
 #include "utils/fs.h"
-#include "../flashcart/flashcart.h"
+#include "../../flashcart/flashcart.h"
 #include "../png_decoder.h"
 #include "views.h"
 #include <stdlib.h>
