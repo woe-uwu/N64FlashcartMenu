@@ -228,7 +228,15 @@ static component_context_menu_t set_soundfx_enabled_type_context_menu = {
 }};
 
 static int get_theme_current_selection (menu_t *menu) {
-    return menu->settings.theme;
+    switch (menu->settings.theme) {
+        case 4: return 1;
+        case 2: return 2;
+        case 5: return 3;
+        case 6: return 4;
+        case 1: return 5;
+        case 3: return 6;
+        default: return 0;
+    }
 }
 
 static component_context_menu_t set_theme_context_menu = {
